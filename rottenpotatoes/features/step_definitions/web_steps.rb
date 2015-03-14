@@ -76,6 +76,12 @@ end
 # TODO: Add support for checkbox, select or option
 # based on naming conventions.
 #
+Given /^the following movies exist:$/ do |table|
+  table.hashes.each do |movie|
+    Movie.create!(movie)
+  end
+end
+
 When /^(?:|I )fill in the following:$/ do |fields|
   fields.rows_hash.each do |name, value|
     When %{I fill in "#{name}" with "#{value}"}
@@ -251,4 +257,9 @@ end
 
 Then /^show me the page$/ do
   save_and_open_page
+end
+
+Then /^the director of "(.*?)" should be "(.*?)"/ do |arg1, arg2|
+  movie = Movie.find_by_title(arg1)
+  assert movie.director == arg2
 end
